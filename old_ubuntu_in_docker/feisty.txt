@@ -1,0 +1,65 @@
+This will get you running Ubuntu Feisty 4.0
+
+I am running on Arch, but generic idea is:
+
+In temp dir or where you got enough space
+
+cd /tmp
+sudo pacman -Sy debootstrap
+sudo debootstrap --arch=i386 feisty feisty http://old-releases.ubuntu.com/ubuntu
+ls feisty/
+
+and now weld it to docker image:
+sudo tar -C feisty -c . | docker import - feisty
+
+$ docker image ls | grep feisty
+feisty        latest    f14887a1b49c   8 minutes ago   180MB
+
+Now you can spin of and add old-releases repository to apt.
+
+
+
+
+$ docker run -it feisty /bin/bash
+root@dfecbfe6b900:/# echo "deb http://old-releases.ubuntu.com/ubuntu feisty main universe multiverse restricted" > /etc/apt/sources.list
+root@dfecbfe6b900:/# apt-get update
+Get:1 http://old-releases.ubuntu.com feisty Release.gpg [191B]
+Hit http://old-releases.ubuntu.com feisty Release
+Hit http://old-releases.ubuntu.com feisty/main Packages
+Get:2 http://old-releases.ubuntu.com feisty/universe Packages [3754kB]
+Get:3 http://old-releases.ubuntu.com feisty/multiverse Packages [148kB]
+Get:4 http://old-releases.ubuntu.com feisty/restricted Packages [7628B]
+Fetched 3911kB in 1s (3334kB/s)
+Reading package lists... Done
+root@dfecbfe6b900:/# apt-get install vim
+Reading package lists... Done
+Building dependency tree... Done
+The following extra packages will be installed:
+  libgpmg1 vim-runtime
+Suggested packages:
+  gpm ctags vim-doc vim-scripts
+The following NEW packages will be installed:
+  libgpmg1 vim vim-runtime
+0 upgraded, 3 newly installed, 0 to remove and 0 not upgraded.
+Need to get 5999kB of archives.
+After unpacking 23.6MB of additional disk space will be used.
+Do you want to continue [Y/n]? y
+Get:1 http://old-releases.ubuntu.com feisty/main vim-runtime 1:7.0-164+1ubuntu7 [5209kB]
+Get:2 http://old-releases.ubuntu.com feisty/main libgpmg1 1.19.6-23build1 [51.1kB]
+Get:3 http://old-releases.ubuntu.com feisty/main vim 1:7.0-164+1ubuntu7 [738kB]
+Fetched 5999kB in 0s (11.7MB/s)
+Selecting previously deselected package vim-runtime.
+(Reading database ... 10099 files and directories currently installed.)
+Unpacking vim-runtime (from .../vim-runtime_1%3a7.0-164+1ubuntu7_all.deb) ...
+Selecting previously deselected package libgpmg1.
+Unpacking libgpmg1 (from .../libgpmg1_1.19.6-23build1_i386.deb) ...
+Selecting previously deselected package vim.
+Unpacking vim (from .../vim_1%3a7.0-164+1ubuntu7_i386.deb) ...
+Setting up vim-runtime (7.0-164+1ubuntu7) ...
+Processing /usr/share/vim/addons/doc
+
+Setting up libgpmg1 (1.19.6-23build1) ...
+
+Setting up vim (7.0-164+1ubuntu7) ...
+
+root@dfecbfe6b900:/#
