@@ -29,13 +29,12 @@ created 0 hardlinks
 4. Put files to root folder
 sudo cp -r ~/htaoe-root/etc/skel/booksrc ~/htaoe-root/root/
 sudo cp ~/htaoe-root/etc/skel/unix_basics ~/htaoe-root/root/
-echo 'if [ -f ~/unix_basics ]; then ~/unix_basics; fi' | sudo tee -a ~/htaoe-root/root/.bashrc > /dev/null
 
 5. Create image
 sudo tar -C ~/htaoe-root -c . | docker import - htaoe
 
 
 6. Run it
-docker run -it --rm --hostname hacking htaoe /bin/bash
+docker run -it --rm --hostname hacking --workdir /root htaoe /bin/bash
 
 
