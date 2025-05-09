@@ -1,0 +1,23 @@
+set path=%path%;"C:\Program Files\Oracle\VirtualBox"
+
+
+
+VBoxManage showvminfo "blackarch"
+
+
+
+C:\Users\Dev\VirtualBox VMs\blackarch\blackarch.vdi
+
+VBoxManage showmediuminfo "C:\Users\Dev\VirtualBox VMs\blackarch\blackarch.vdi"
+
+
+
+VBoxManage modifymedium "C:\Users\Dev\VirtualBox VMs\blackarch\blackarch.vdi" --resize 30720
+
+boot with archlinux live iso
+then
+parted -s -a opt /dev/sda "resizepart 2 100%"
+e2fsck -f /dev/sda2
+resize2fs /dev/sda2
+
+
