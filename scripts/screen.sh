@@ -8,6 +8,6 @@ bind k focus up
 bind j focus down
 bind h focus left
 bind l focus right
-caption always "%{0}<<<%n:%t>>>"
+caption always "<<<%n:%t>>>"
 rendition so "="
 EOF
